@@ -1,250 +1,188 @@
--- main.lua | UI Library fix full đen Dark Mode
-
 local Library = {}
-Library.__index = Library
 
--- Các theme màu
-local Themes = {
-    Dark = {
-        Background = Color3.fromRGB(25, 25, 25),
-        Topbar = Color3.fromRGB(30, 30, 30),
-        Button = Color3.fromRGB(50, 50, 50),
-        Tab = Color3.fromRGB(40, 40, 40),
-        Text = Color3.fromRGB(255, 255, 255)
-    },
-    Light = {
-        Background = Color3.fromRGB(245, 245, 245),
-        Topbar = Color3.fromRGB(230, 230, 230),
-        Button = Color3.fromRGB(210, 210, 210),
-        Tab = Color3.fromRGB(200, 200, 200),
-        Text = Color3.fromRGB(0, 0, 0)
-    },
-    Blue = {
-        Background = Color3.fromRGB(20, 20, 35),
-        Topbar = Color3.fromRGB(30, 30, 60),
-        Button = Color3.fromRGB(40, 40, 80),
-        Tab = Color3.fromRGB(35, 35, 70),
-        Text = Color3.fromRGB(200, 200, 255)
-    },
-    Green = {
-        Background = Color3.fromRGB(20, 35, 20),
-        Topbar = Color3.fromRGB(30, 60, 30),
-        Button = Color3.fromRGB(40, 80, 40),
-        Tab = Color3.fromRGB(35, 70, 35),
-        Text = Color3.fromRGB(200, 255, 200)
-    }
-}
-
--- Tạo Window
 function Library:CreateWindow(config)
-    local theme = Themes[config.Theme] or Themes.Dark
+    local UIS = game:GetService("UserInputService")
 
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Parent = game:GetService("CoreGui")
-    ScreenGui.ResetOnSpawn = false
+    local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+    local MainFrame = Instance.new("Frame", ScreenGui)
+    local TopBar = Instance.new("Frame", MainFrame)
+    local Title = Instance.new("TextLabel", TopBar)
+    local CloseBtn = Instance.new("TextButton", TopBar)
+    local MinBtn = Instance.new("TextButton", TopBar)
+    local TabFrame = Instance.new("Frame", MainFrame)
+    local Content = Instance.new("Frame", MainFrame)
+    local UIListLayout = Instance.new("UIListLayout", TabFrame)
 
-    local MainFrame = Instance.new("Frame")
+    ScreenGui.Name = config.Folder or "MyHub"
     MainFrame.Size = config.Size or UDim2.fromOffset(420, 340)
-    MainFrame.Position = UDim2.new(0.5, -MainFrame.Size.X.Offset/2, 0.5, -MainFrame.Size.Y.Offset/2)
-    MainFrame.BackgroundColor3 = theme.Background
+    MainFrame.Position = UDim2.new(0.5, -210, 0.5, -170)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     MainFrame.BorderSizePixel = 0
     MainFrame.Active = true
     MainFrame.Draggable = true
-    MainFrame.Parent = ScreenGui
 
-    -- Hiệu ứng bo viền mờ
-    local UIStroke = Instance.new("UIStroke", MainFrame)
-    UIStroke.Thickness = 2
-    UIStroke.Color = Color3.fromRGB(0,0,0)
-    UIStroke.Transparency = 0.3
+    -- TopBar
+    TopBar.Size = UDim2.new(1, 0, 0, 30)
+    TopBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    TopBar.BorderSizePixel = 0
 
-    -- Topbar
-    local Topbar = Instance.new("Frame")
-    Topbar.Size = UDim2.new(1, 0, 0, 30)
-    Topbar.BackgroundColor3 = theme.Topbar
-    Topbar.BorderSizePixel = 0
-    Topbar.Parent = MainFrame
-
-    -- Title + Author
-    local Title = Instance.new("TextLabel")
-    Title.Text = config.Title .. " | " .. config.Author
+    -- Title
+    Title.Text = (config.Title or "Name Hub") .. " | " .. (config.Author or "")
     Title.Size = UDim2.new(1, -90, 1, 0)
-    Title.Position = UDim2.new(0, 10, 0, 0)
-    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Position = UDim2.new(0, 5, 0, 0)
     Title.BackgroundTransparency = 1
-    Title.Font = Enum.Font.SourceSansBold
-    Title.TextSize = 16
-    Title.TextColor3 = theme.Text
-    Title.Parent = Topbar
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 14
 
-    -- Nút minimize (-)
-    local MinBtn = Instance.new("TextButton")
-    MinBtn.Size = UDim2.new(0, 30, 1, 0)
-    MinBtn.Position = UDim2.new(1, -60, 0, 0)
-    MinBtn.Text = "-"
-    MinBtn.Font = Enum.Font.SourceSansBold
-    MinBtn.TextSize = 18
-    MinBtn.TextColor3 = theme.Text
-    MinBtn.BackgroundColor3 = theme.Button
-    MinBtn.BorderSizePixel = 0
-    MinBtn.Parent = Topbar
-
-    -- Nút close (X)
-    local CloseBtn = Instance.new("TextButton")
-    CloseBtn.Size = UDim2.new(0, 30, 1, 0)
-    CloseBtn.Position = UDim2.new(1, -30, 0, 0)
+    -- CloseBtn (X)
     CloseBtn.Text = "X"
-    CloseBtn.Font = Enum.Font.SourceSansBold
-    CloseBtn.TextSize = 18
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.Size = UDim2.fromOffset(30, 30)
+    CloseBtn.Position = UDim2.new(1, -30, 0, 0)
     CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-    CloseBtn.BorderSizePixel = 0
-    CloseBtn.Parent = Topbar
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 14
+
+    -- MinBtn (-)
+    MinBtn.Text = "-"
+    MinBtn.Size = UDim2.fromOffset(30, 30)
+    MinBtn.Position = UDim2.new(1, -60, 0, 0)
+    MinBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextSize = 14
+
+    -- TabFrame
+    TabFrame.Size = UDim2.new(0, 100, 1, -30)
+    TabFrame.Position = UDim2.new(0, 0, 0, 30)
+    TabFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 
     -- Content
-    local Content = Instance.new("Frame")
-    Content.Size = UDim2.new(1, 0, 1, -30)
-    Content.Position = UDim2.new(0, 0, 0, 30)
-    Content.BackgroundTransparency = 1
-    Content.Parent = MainFrame
+    Content.Size = UDim2.new(1, -100, 1, -30)
+    Content.Position = UDim2.new(0, 100, 0, 30)
+    Content.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
-    -- Tabs list
-    local TabList = Instance.new("Frame")
-    TabList.Size = UDim2.new(0, 100, 1, 0)
-    TabList.BackgroundColor3 = theme.Tab
-    TabList.BorderSizePixel = 0
-    TabList.Parent = Content
-
-    local Pages = Instance.new("Frame")
-    Pages.Size = UDim2.new(1, -100, 1, 0)
-    Pages.Position = UDim2.new(0, 100, 0, 0)
-    Pages.BackgroundColor3 = theme.Background
-    Pages.BorderSizePixel = 0
-    Pages.Parent = Content
-
-    local TabFolder = Instance.new("Folder", Pages)
-
-    local Window = {}
-    Window.Tabs = {}
-
-    function Window:Tab(info)
-        local TabBtn = Instance.new("TextButton")
-        TabBtn.Size = UDim2.new(1, 0, 0, 30)
-        TabBtn.Text = info.Title
-        TabBtn.Font = Enum.Font.SourceSans
-        TabBtn.TextSize = 16
-        TabBtn.TextColor3 = theme.Text
-        TabBtn.BackgroundTransparency = 1
-        TabBtn.Parent = TabList
-
-        local TabPage = Instance.new("ScrollingFrame")
-        TabPage.Size = UDim2.new(1, 0, 1, 0)
-        TabPage.BackgroundTransparency = 1
-        TabPage.BorderSizePixel = 0
-        TabPage.Visible = false
-        TabPage.ScrollBarThickness = 4
-        TabPage.Parent = TabFolder
-
-        local UIList = Instance.new("UIListLayout", TabPage)
-        UIList.Padding = UDim.new(0, 5)
-        UIList.FillDirection = Enum.FillDirection.Vertical
-        UIList.SortOrder = Enum.SortOrder.LayoutOrder
-
-        TabBtn.MouseButton1Click:Connect(function()
-            for _, page in ipairs(TabFolder:GetChildren()) do
-                page.Visible = false
-            end
-            TabPage.Visible = true
-        end)
-
-        local TabFuncs = {}
-        function TabFuncs:Button(text, callback)
-            local Btn = Instance.new("TextButton")
-            Btn.Size = UDim2.new(0, 200, 0, 30)
-            Btn.Text = text
-            Btn.Font = Enum.Font.SourceSansBold
-            Btn.TextSize = 16
-            Btn.TextColor3 = theme.Text
-            Btn.BackgroundColor3 = theme.Button
-            Btn.Parent = TabPage
-            Btn.MouseButton1Click:Connect(callback)
-        end
-
-        function TabFuncs:Toggle(text, callback)
-            local state = false
-            local Btn = Instance.new("TextButton")
-            Btn.Size = UDim2.new(0, 200, 0, 30)
-            Btn.Text = text .. ": OFF"
-            Btn.Font = Enum.Font.SourceSansBold
-            Btn.TextSize = 16
-            Btn.TextColor3 = theme.Text
-            Btn.BackgroundColor3 = theme.Button
-            Btn.Parent = TabPage
-            Btn.MouseButton1Click:Connect(function()
-                state = not state
-                Btn.Text = text .. (state and ": ON" or ": OFF")
-                callback(state)
-            end)
-        end
-
-        function TabFuncs:Dropdown(text, options, callback)
-            local Btn = Instance.new("TextButton")
-            Btn.Size = UDim2.new(0, 200, 0, 30)
-            Btn.Text = text
-            Btn.Font = Enum.Font.SourceSansBold
-            Btn.TextSize = 16
-            Btn.TextColor3 = theme.Text
-            Btn.BackgroundColor3 = theme.Button
-            Btn.Parent = TabPage
-
-            local DropFrame = Instance.new("Frame")
-            DropFrame.Size = UDim2.new(0, 200, 0, #options * 25)
-            DropFrame.Position = UDim2.new(0, 0, 0, 30)
-            DropFrame.BackgroundColor3 = theme.Tab
-            DropFrame.Visible = false
-            DropFrame.Parent = Btn
-
-            local UIList = Instance.new("UIListLayout", DropFrame)
-            UIList.SortOrder = Enum.SortOrder.LayoutOrder
-
-            for _, opt in ipairs(options) do
-                local OptBtn = Instance.new("TextButton")
-                OptBtn.Size = UDim2.new(1, 0, 0, 25)
-                OptBtn.Text = opt
-                OptBtn.TextSize = 14
-                OptBtn.Font = Enum.Font.SourceSans
-                OptBtn.TextColor3 = theme.Text
-                OptBtn.BackgroundTransparency = 1
-                OptBtn.Parent = DropFrame
-
-                OptBtn.MouseButton1Click:Connect(function()
-                    Btn.Text = text .. ": " .. opt
-                    DropFrame.Visible = false
-                    callback(opt)
-                end)
-            end
-
-            Btn.MouseButton1Click:Connect(function()
-                DropFrame.Visible = not DropFrame.Visible
-            end)
-        end
-
-        Window.Tabs[info.Title] = TabFuncs
-        if #TabFolder:GetChildren() == 1 then
-            TabPage.Visible = true
-        end
-        return TabFuncs
-    end
-
-    -- Ẩn hiện UI
-    MinBtn.MouseButton1Click:Connect(function()
-        Content.Visible = not Content.Visible
-    end)
-
-    -- Đóng UI
+    -- Close event
     CloseBtn.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
     end)
+
+    -- Minimize (ẩn toàn bộ UI)
+    MinBtn.MouseButton1Click:Connect(function()
+        MainFrame.Visible = false
+    end)
+
+    -- Phím tắt để bật lại
+    UIS.InputBegan:Connect(function(input, gpe)
+        if gpe then return end
+        if input.KeyCode == Enum.KeyCode.RightShift then
+            MainFrame.Visible = not MainFrame.Visible
+        end
+    end)
+
+    local Window = {}
+    local Tabs = {}
+
+    function Window:Tab(tabConfig)
+        local TabBtn = Instance.new("TextButton", TabFrame)
+        TabBtn.Size = UDim2.new(1, 0, 0, 30)
+        TabBtn.Text = tabConfig.Title or "Tab"
+        TabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        TabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TabBtn.Font = Enum.Font.Gotham
+        TabBtn.TextSize = 14
+
+        local TabContent = Instance.new("ScrollingFrame", Content)
+        TabContent.Size = UDim2.new(1, 0, 1, 0)
+        TabContent.Visible = false
+        TabContent.BackgroundTransparency = 1
+        TabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+        local List = Instance.new("UIListLayout", TabContent)
+        List.Padding = UDim.new(0, 5)
+        List.SortOrder = Enum.SortOrder.LayoutOrder
+
+        TabBtn.MouseButton1Click:Connect(function()
+            for _, t in pairs(Tabs) do
+                t.Content.Visible = false
+            end
+            TabContent.Visible = true
+        end)
+
+        local Elements = {}
+
+        function Elements:Button(txt, callback)
+            local Btn = Instance.new("TextButton", TabContent)
+            Btn.Size = UDim2.new(0, 200, 0, 30)
+            Btn.Text = txt
+            Btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Btn.Font = Enum.Font.Gotham
+            Btn.TextSize = 14
+            Btn.MouseButton1Click:Connect(callback)
+            return Btn
+        end
+
+        function Elements:Toggle(txt, callback)
+            local Btn = Instance.new("TextButton", TabContent)
+            Btn.Size = UDim2.new(0, 200, 0, 30)
+            Btn.Text = txt .. ": OFF"
+            Btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Btn.Font = Enum.Font.Gotham
+            Btn.TextSize = 14
+
+            local state = false
+            Btn.MouseButton1Click:Connect(function()
+                state = not state
+                Btn.Text = txt .. ": " .. (state and "ON" or "OFF")
+                callback(state)
+            end)
+            return Btn
+        end
+
+        function Elements:Dropdown(txt, list, callback)
+            local DD = Instance.new("TextButton", TabContent)
+            DD.Size = UDim2.new(0, 200, 0, 30)
+            DD.Text = txt .. " ▼"
+            DD.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            DD.TextColor3 = Color3.fromRGB(255, 255, 255)
+            DD.Font = Enum.Font.Gotham
+            DD.TextSize = 14
+
+            local Open = false
+            DD.MouseButton1Click:Connect(function()
+                Open = not Open
+                if Open then
+                    for _, v in ipairs(list) do
+                        local Opt = Instance.new("TextButton", TabContent)
+                        Opt.Size = UDim2.new(0, 200, 0, 25)
+                        Opt.Text = v
+                        Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+                        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        Opt.Font = Enum.Font.Gotham
+                        Opt.TextSize = 14
+                        Opt.MouseButton1Click:Connect(function()
+                            callback(v)
+                            Opt:Destroy()
+                            Open = false
+                        end)
+                    end
+                end
+            end)
+
+            return DD
+        end
+
+        Tabs[#Tabs+1] = { Button = TabBtn, Content = TabContent }
+        if #Tabs == 1 then
+            TabContent.Visible = true
+        end
+
+        return Elements
+    end
 
     return Window
 end
