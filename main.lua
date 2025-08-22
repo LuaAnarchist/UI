@@ -1,221 +1,238 @@
+-- Library UI
 local Library = {}
-
-local function StyleUI(obj, radius)
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, radius or 6)
-    corner.Parent = obj
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Thickness = 1
-    stroke.Color = Color3.fromRGB(255,255,255)
-    stroke.Transparency = 0.8
-    stroke.Parent = obj
-end
 
 local Themes = {
     Dark = {
-        Background = Color3.fromRGB(25,25,25),
-        Panel = Color3.fromRGB(35,35,35),
-        Content = Color3.fromRGB(45,45,45),
-        Header = Color3.fromRGB(40,40,40),
-        Text = Color3.fromRGB(255,255,255)
+        Background = Color3.fromRGB(25, 25, 25),
+        Header = Color3.fromRGB(35, 35, 35),
+        Text = Color3.fromRGB(255, 255, 255),
+        Button = Color3.fromRGB(60, 60, 60)
     },
     Light = {
-        Background = Color3.fromRGB(240,240,240),
-        Panel = Color3.fromRGB(220,220,220),
-        Content = Color3.fromRGB(230,230,230),
-        Header = Color3.fromRGB(200,200,200),
-        Text = Color3.fromRGB(0,0,0)
+        Background = Color3.fromRGB(240, 240, 240),
+        Header = Color3.fromRGB(200, 200, 200),
+        Text = Color3.fromRGB(0, 0, 0),
+        Button = Color3.fromRGB(220, 220, 220)
     },
     Blue = {
-        Background = Color3.fromRGB(20,30,60),
-        Panel = Color3.fromRGB(30,45,90),
-        Content = Color3.fromRGB(40,60,120),
-        Header = Color3.fromRGB(0,120,215),
-        Text = Color3.fromRGB(255,255,255)
+        Background = Color3.fromRGB(20, 25, 60),
+        Header = Color3.fromRGB(40, 80, 160),
+        Text = Color3.fromRGB(255, 255, 255),
+        Button = Color3.fromRGB(70, 120, 200)
     },
     Green = {
-        Background = Color3.fromRGB(20,50,20),
-        Panel = Color3.fromRGB(30,90,30),
-        Content = Color3.fromRGB(50,120,50),
-        Header = Color3.fromRGB(0,150,80),
-        Text = Color3.fromRGB(255,255,255)
+        Background = Color3.fromRGB(20, 60, 30),
+        Header = Color3.fromRGB(40, 120, 60),
+        Text = Color3.fromRGB(255, 255, 255),
+        Button = Color3.fromRGB(70, 160, 90)
     }
 }
 
-function Library:CreateWindow(config)
-    config = config or {}
-    local Folder = config.Folder or "Hub"
-    local Title = config.Title or "My Hub"
-    local Author = config.Author or "Unknown"
-    local Size = config.Size or UDim2.fromOffset(720, 500)
-    local Transparent = config.Transparent or false
-    local ThemeName = config.Theme or "Dark"
-    local Theme = Themes[ThemeName] or Themes.Dark
+local function StyleUI(obj, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, radius)
+    c.Parent = obj
+end
 
-    local ScreenGui = Instance.new("ScreenGui")
+function Library:CreateWindow(cfg)
+    local Folder = cfg.Folder or "MyHub"
+    local Title = cfg.Title or "Hub"
+    local Author = cfg.Author or "Unknown"
+    local Size = cfg.Size or UDim2.fromOffset(500, 350)
+    local Theme = Themes[cfg.Theme] or Themes.Dark
+
+    local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
     ScreenGui.Name = Folder
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    local Main = Instance.new("Frame")
+    local Main = Instance.new("Frame", ScreenGui)
     Main.Size = Size
     Main.Position = UDim2.new(0.5, -Size.X.Offset/2, 0.5, -Size.Y.Offset/2)
     Main.BackgroundColor3 = Theme.Background
-    Main.BackgroundTransparency = 1
-    Main.Parent = ScreenGui
     Main.Active = true
     Main.Draggable = true
-    StyleUI(Main, 12)
+    StyleUI(Main, 8)
 
-    game:GetService("TweenService"):Create(
-        Main,
-        TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {BackgroundTransparency = Transparent and 0.2 or 0}
-    ):Play()
-
-    local Header = Instance.new("TextLabel", Main)
-    Header.Size = UDim2.new(1, 0, 0, 40)
+    -- Header
+    local Header = Instance.new("Frame", Main)
+    Header.Size = UDim2.new(1, 0, 0, 35)
     Header.BackgroundColor3 = Theme.Header
-    Header.Text = Title .. " | " .. Author
-    Header.TextColor3 = Theme.Text
-    Header.Font = Enum.Font.SourceSansBold
-    Header.TextSize = 18
-    Header.BackgroundTransparency = 1
     StyleUI(Header, 8)
 
-    game:GetService("TweenService"):Create(
-        Header,
-        TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {BackgroundTransparency = 0}
-    ):Play()
+    local TitleLabel = Instance.new("TextLabel", Header)
+    TitleLabel.Size = UDim2.new(0, 200, 1, 0)
+    TitleLabel.Position = UDim2.new(0, 10, 0, 0)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = Title
+    TitleLabel.TextColor3 = Theme.Text
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.TextSize = 16
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    local TabPanel = Instance.new("Frame", Main)
-    TabPanel.Size = UDim2.new(0, 150, 1, -40)
-    TabPanel.Position = UDim2.new(0,0,0,40)
-    TabPanel.BackgroundColor3 = Theme.Panel
-    TabPanel.BackgroundTransparency = 1
-    StyleUI(TabPanel, 8)
+    local AuthorLabel = Instance.new("TextLabel", Header)
+    AuthorLabel.Size = UDim2.new(0, 150, 1, 0)
+    AuthorLabel.Position = UDim2.new(0, 220, 0, 0)
+    AuthorLabel.BackgroundTransparency = 1
+    AuthorLabel.Text = "by " .. Author
+    AuthorLabel.TextColor3 = Theme.Text
+    AuthorLabel.Font = Enum.Font.SourceSans
+    AuthorLabel.TextSize = 14
+    AuthorLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    game:GetService("TweenService"):Create(
-        TabPanel,
-        TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {BackgroundTransparency = 0}
-    ):Play()
+    -- Hide Button
+    local HideButton = Instance.new("TextButton", Header)
+    HideButton.Size = UDim2.new(0, 30, 0, 25)
+    HideButton.Position = UDim2.new(1, -70, 0.5, -12)
+    HideButton.BackgroundColor3 = Theme.Button
+    HideButton.Text = "-"
+    HideButton.TextColor3 = Theme.Text
+    StyleUI(HideButton, 6)
 
-    local ContentPanel = Instance.new("Frame", Main)
-    ContentPanel.Size = UDim2.new(1, -150, 1, -40)
-    ContentPanel.Position = UDim2.new(0,150,0,40)
-    ContentPanel.BackgroundColor3 = Theme.Content
-    ContentPanel.BackgroundTransparency = 1
-    StyleUI(ContentPanel, 8)
+    -- Exit Button
+    local ExitButton = Instance.new("TextButton", Header)
+    ExitButton.Size = UDim2.new(0, 30, 0, 25)
+    ExitButton.Position = UDim2.new(1, -35, 0.5, -12)
+    ExitButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    ExitButton.Text = "X"
+    ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    StyleUI(ExitButton, 6)
 
-    game:GetService("TweenService"):Create(
-        ContentPanel,
-        TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {BackgroundTransparency = 0}
-    ):Play()
+    ExitButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
 
-    local Window = {}
-    Window.Tabs = {}
+    local hidden = false
+    HideButton.MouseButton1Click:Connect(function()
+        hidden = not hidden
+        for _, v in pairs(Main:GetChildren()) do
+            if v ~= Header then
+                v.Visible = not hidden
+            end
+        end
+        HideButton.Text = hidden and "+" or "-"
+    end)
 
-    function Window:Tab(tabConfig)
-        tabConfig = tabConfig or {}
-        local TabTitle = tabConfig.Title or "Tab"
+    -- Tab container
+    local TabHolder = Instance.new("Frame", Main)
+    TabHolder.Size = UDim2.new(0, 120, 1, -35)
+    TabHolder.Position = UDim2.new(0, 0, 0, 35)
+    TabHolder.BackgroundColor3 = Theme.Header
+    StyleUI(TabHolder, 6)
 
-        local TabButton = Instance.new("TextButton", TabPanel)
-        TabButton.Size = UDim2.new(1, -10, 0, 35)
-        TabButton.Position = UDim2.new(0, 5, 0, #TabPanel:GetChildren()*40)
-        TabButton.Text = TabTitle
-        TabButton.BackgroundColor3 = Theme.Panel
+    local TabButtons = Instance.new("Frame", TabHolder)
+    TabButtons.Size = UDim2.new(1, 0, 1, 0)
+    TabButtons.BackgroundTransparency = 1
+
+    local TabList = Instance.new("UIListLayout", TabButtons)
+    TabList.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local Pages = Instance.new("Frame", Main)
+    Pages.Size = UDim2.new(1, -120, 1, -35)
+    Pages.Position = UDim2.new(0, 120, 0, 35)
+    Pages.BackgroundTransparency = 1
+
+    local Tabs = {}
+
+    function Library:Tab(cfg)
+        local TabName = cfg.Title or "Tab"
+
+        local TabButton = Instance.new("TextButton", TabButtons)
+        TabButton.Size = UDim2.new(1, -10, 0, 30)
+        TabButton.Text = TabName
+        TabButton.BackgroundColor3 = Theme.Button
         TabButton.TextColor3 = Theme.Text
         StyleUI(TabButton, 6)
 
-        local TabContent = Instance.new("Frame", ContentPanel)
-        TabContent.Size = UDim2.new(1, 0, 1, 0)
-        TabContent.Visible = false
-        TabContent.BackgroundTransparency = 1
+        local Page = Instance.new("ScrollingFrame", Pages)
+        Page.Size = UDim2.new(1, 0, 1, 0)
+        Page.Visible = false
+        Page.BackgroundTransparency = 1
+        Page.ScrollBarThickness = 6
+
+        local PageLayout = Instance.new("UIListLayout", Page)
+        PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        PageLayout.Padding = UDim.new(0, 6)
 
         TabButton.MouseButton1Click:Connect(function()
-            for _,v in pairs(ContentPanel:GetChildren()) do
-                if v:IsA("Frame") then v.Visible = false end
+            for _, v in pairs(Pages:GetChildren()) do
+                if v:IsA("ScrollingFrame") then
+                    v.Visible = false
+                end
             end
-            TabContent.Visible = true
+            Page.Visible = true
         end)
 
-        local Tab = {}
-        Tab.Content = TabContent
-
-        function Tab:Button(text, callback)
-            local Btn = Instance.new("TextButton", TabContent)
-            Btn.Size = UDim2.new(0, 200, 0, 35)
-            Btn.Position = UDim2.new(0, 20, 0, #TabContent:GetChildren()*40)
-            Btn.Text = text
-            Btn.BackgroundColor3 = Theme.Header
-            Btn.TextColor3 = Theme.Text
-            StyleUI(Btn, 6)
-            Btn.MouseButton1Click:Connect(callback)
+        if #Pages:GetChildren() == 1 then
+            Page.Visible = true
         end
 
-        function Tab:Toggle(text, callback)
-            local Toggled = false
-            local Btn = Instance.new("TextButton", TabContent)
-            Btn.Size = UDim2.new(0, 200, 0, 35)
-            Btn.Position = UDim2.new(0, 20, 0, #TabContent:GetChildren()*40)
-            Btn.Text = text .. ": OFF"
-            Btn.BackgroundColor3 = Theme.Panel
-            Btn.TextColor3 = Color3.fromRGB(255,0,0)
-            StyleUI(Btn, 6)
+        local TabAPI = {}
 
-            Btn.MouseButton1Click:Connect(function()
-                Toggled = not Toggled
-                Btn.Text = text .. (Toggled and ": ON" or ": OFF")
-                Btn.TextColor3 = Toggled and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
-                callback(Toggled)
+        function TabAPI:Button(txt, callback)
+            local b = Instance.new("TextButton", Page)
+            b.Size = UDim2.new(0, 200, 0, 30)
+            b.Text = txt
+            b.BackgroundColor3 = Theme.Button
+            b.TextColor3 = Theme.Text
+            StyleUI(b, 6)
+            b.MouseButton1Click:Connect(callback)
+        end
+
+        function TabAPI:Toggle(txt, callback)
+            local t = Instance.new("TextButton", Page)
+            t.Size = UDim2.new(0, 200, 0, 30)
+            t.BackgroundColor3 = Theme.Button
+            t.TextColor3 = Theme.Text
+            t.Text = txt .. ": OFF"
+            StyleUI(t, 6)
+            local state = false
+            t.MouseButton1Click:Connect(function()
+                state = not state
+                t.Text = txt .. ": " .. (state and "ON" or "OFF")
+                callback(state)
             end)
         end
 
-        function Tab:Dropdown(text, list, callback)
-            local DropMain = Instance.new("TextButton", TabContent)
-            DropMain.Size = UDim2.new(0, 200, 0, 35)
-            DropMain.Position = UDim2.new(0, 20, 0, #TabContent:GetChildren()*40)
-            DropMain.Text = text .. " ▼"
-            DropMain.BackgroundColor3 = Theme.Header
-            DropMain.TextColor3 = Theme.Text
-            StyleUI(DropMain, 6)
+        function TabAPI:Dropdown(txt, list, callback)
+            local d = Instance.new("TextButton", Page)
+            d.Size = UDim2.new(0, 200, 0, 30)
+            d.BackgroundColor3 = Theme.Button
+            d.TextColor3 = Theme.Text
+            d.Text = txt .. " ▼"
+            StyleUI(d, 6)
 
-            local DropFrame = Instance.new("Frame", TabContent)
-            DropFrame.Size = UDim2.new(0, 200, 0, 0)
-            DropFrame.Position = DropMain.Position + UDim2.new(0,0,0,35)
-            DropFrame.BackgroundColor3 = Theme.Content
-            DropFrame.ClipsDescendants = true
-            StyleUI(DropFrame, 6)
+            local Frame = Instance.new("Frame", Page)
+            Frame.Size = UDim2.new(0, 200, 0, #list * 25)
+            Frame.BackgroundColor3 = Theme.Header
+            Frame.Visible = false
+            StyleUI(Frame, 6)
 
-            local expanded = false
-            DropMain.MouseButton1Click:Connect(function()
-                expanded = not expanded
-                local newSize = expanded and (#list*30) or 0
-                DropFrame:TweenSize(UDim2.new(0,200,0,newSize), "Out", "Quad", 0.3, true)
-            end)
+            local layout = Instance.new("UIListLayout", Frame)
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
 
-            for i, v in ipairs(list) do
-                local Opt = Instance.new("TextButton", DropFrame)
-                Opt.Size = UDim2.new(1, 0, 0, 30)
-                Opt.Position = UDim2.new(0, 0, 0, (i-1)*30)
-                Opt.Text = v
-                Opt.BackgroundColor3 = Theme.Panel
-                Opt.TextColor3 = Theme.Text
-                StyleUI(Opt, 6)
-                Opt.MouseButton1Click:Connect(function()
-                    DropMain.Text = text .. ": " .. v .. " ▼"
+            for _, v in ipairs(list) do
+                local opt = Instance.new("TextButton", Frame)
+                opt.Size = UDim2.new(1, 0, 0, 25)
+                opt.BackgroundColor3 = Theme.Button
+                opt.TextColor3 = Theme.Text
+                opt.Text = v
+                StyleUI(opt, 6)
+                opt.MouseButton1Click:Connect(function()
+                    d.Text = txt .. ": " .. v
+                    Frame.Visible = false
                     callback(v)
                 end)
             end
+
+            d.MouseButton1Click:Connect(function()
+                Frame.Visible = not Frame.Visible
+            end)
         end
 
-        return Tab
+        Tabs[TabName] = TabAPI
+        return TabAPI
     end
 
-    return Window
+    return Library
 end
 
 return Library
