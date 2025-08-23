@@ -6,7 +6,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(480, 360),
     Acrylic = false,
     Theme = "Darker",
-    Enum.KeyCode.LeftControl
+    MinimizeKey = Enum.KeyCode.LeftControl
 })
 local Tab =  {
      Info = Window:AddTab({ Title = "Tab Information"}),
