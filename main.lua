@@ -1110,7 +1110,7 @@ local v3 = Tabs.M:AddToggle("v3", {
     Description = "",
     Default = false,
 })
-V3:OnChanged(function(Value)
+v3:OnChanged(function(Value)
     getgenv().StartFarm = Value
 end)
 print("Cac")
