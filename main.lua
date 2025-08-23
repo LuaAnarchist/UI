@@ -8,7 +8,7 @@ local Window = Fluent:CreateWindow({
     Theme = "Darker",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
-local Tab =  {
+local Tabs =  {
      Info = Window:AddTab({ Title = "Tab Information"}),
      M = Window:AddTab({ Title = "Tab Main"}),
 }
@@ -845,6 +845,7 @@ Tabs.Info:AddButton({
     Content = "Link Discord",
     Callback = function()
         setclipboard("https://discord.gg/yQjekwtWrS")
+end
 })
 local v1 = Tabs.M:AddSection("Tab Main")
 local v2 = Tabs.M:AddDropdown("v2", {
