@@ -1012,99 +1012,56 @@ spawn(function()
             end
         end
     end)
-local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
-    local Plsmon = game:GetService("Workspace").Enemies
-     task.spawn(function()
-    while task.wait() do
-        if getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 then
-            pcall(function()
-                if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
-                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v.Name == "Cake Prince" then
-                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                repeat
-                                    task.wait()
-                                    AutoHaki()
-                                    EquipWeapon(_G.SelectWeapon)
-                                    v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
-                                    v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                                    if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
-                                    else
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
-                                    end
-                                    NeedAttacking = true
-                                until not getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 or not v.Parent or v.Humanoid.Health <= 0
-                                wait(1)
-                            end
-                        end
-                    end
-                else
-                    local foundMob = false
-                    for _, mobName in pairs({"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}) do
-                        if game:GetService("Workspace").Enemies:FindFirstChild(mobName) then
-                            foundMob = true
-                            break
-                        end
-                    end
-                    if foundMob then
-                        for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v.Name == "Cookie Crafter" or v.Name == "Cake Guard" or v.Name == "Baking Staff" or v.Name == "Head Baker" then
-                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                    repeat
-                                        task.wait()
-                                        AutoHaki()
-                                        EquipWeapon(_G.SelectWeapon)
-                                        v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
-                                        StartBring = true
-                                        v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                                        PosMon = v.HumanoidRootPart.CFrame
-                                        MonFarm = v.Name
-                                        v.Head.CanCollide = false
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                        NeedAttacking = true
-                                        if v.Name == "Cookie Crafter" then
-                                            Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
-                                        elseif v.Name == "Cake Guard" then
-                                            Bring(v.Name, CFrame.new(-1693.98047, 35.2188225, -12436.8438, -0.716115236, 0, -0.697982132, 0, 1, 0, 0.697982132, 0, -0.716115236))
-                                        elseif v.Name == "Baking Staff" then
-                                            Bring(v.Name, CFrame.new(-1980.4375, 34.6653099, -12983.8408, -0.254338264, 0, -0.967115223, 0, 1, 0, 0.967115223, 0, -0.254338264))
-                                        elseif v.Name == "Head Baker" then
-                                            Bring(v.Name, CFrame.new(-2151.37793, 51.0095749, -13033.3975, -0.996587753, 0, 0.0825396702, 0, 1, 0, -0.0825396702, 0, -0.996587753))
-                                        end
-                                    until not getgenv().StartFarm or ModeFarm == "Farm Katakuri" or World3 or not v.Parent or v.Humanoid.Health <= 0 or game:GetService("Workspace").Map.CakeLoaf.BigMirror.Other.Transparency == 0 or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]")
-                                    DamageAura = false
-                                end
-                            end
-                        end
-                    else
-                        local RandomTele = math.random(1, 3)
-                        if RandomTele == 1 then
-                            TP("Tween", CFrame.new(-1436.86011, 167.753616, -12296.9512))
-                        elseif RandomTele == 2 then
-                            TP("Tween", CFrame.new(-2383.78979, 150.450592, -12126.4961))
-                        elseif RandomTele == 3 then
-                            TP("Tween", CFrame.new(-2231.2793, 168.256653, -12845.7559))
-                        end
-                    end
-                    if BypassTP then
-                        if (playerPos - CakePos.Position).Magnitude > 1500 then
-                            TP("Tween", CakePos)
-                        else
-                            TP("Tween", CakePos)
-                        end
-                    else
-                        TP("Tween", CakePos)
-                    end
-                    UnEquipWeapon(_G.SelectWeapon)
-                    TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
-                end
-            end)
-        end
-    end
-end)
+spawn(function()
+	while wait(0.2) do
+		if getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 then
+			pcall(function()
+				if game.ReplicatedStorage:FindFirstChild("Cake Prince") or (game:GetService("Workspace")).Enemies:FindFirstChild("Cake Prince") then
+					if (game:GetService("Workspace")).Enemies:FindFirstChild("Cake Prince") then
+						for i, v in pairs((game:GetService("Workspace")).Enemies:GetChildren()) do
+							if v.Name == "Cake Prince" then
+								if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+									repeat
+										(game:GetService("RunService")).Heartbeat:wait();
+										AutoHaki();
+										EquipWeapon(_G.Settings.Main["Selected Weapon"]);
+										v.Humanoid.WalkSpeed = 0;
+										v.HumanoidRootPart.Size = Vector3.new(1, 1, 1);
+										TP("Tween", v.HumanoidRootPart.CFrame * Pos);
+										RemoveAnimation(v);
+										Attack();
+									until not getgenv().StartFarm or ModeFarm == "Farm Katakuri" or World3 or (not v.Parent) or v.Humanoid.Health <= 0;
+								end;
+							end;
+						end;
+					elseif (game:GetService("Workspace")).Map.CakeLoaf.BigMirror.Other.Transparency == 0 and ((CFrame.new((-1990.672607421875), 4532.99951171875, (-14973.6748046875))).Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude >= 2000 then
+						TP("Tween", CFrame.new(-2151.82153, 149.315704, -12404.9053));
+					end;
+				elseif (game:GetService("Workspace")).Enemies:FindFirstChild("Cookie Crafter") or (game:GetService("Workspace")).Enemies:FindFirstChild("Cake Guard") or (game:GetService("Workspace")).Enemies:FindFirstChild("Baking Staff") or (game:GetService("Workspace")).Enemies:FindFirstChild("Head Baker") then
+					for i, v in pairs((game:GetService("Workspace")).Enemies:GetChildren()) do
+						if v.Name == "Cookie Crafter" or v.Name == "Cake Guard" or v.Name == "Baking Staff" or v.Name == "Head Baker" then
+							if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+								repeat
+									(game:GetService("RunService")).Heartbeat:wait();
+									AutoHaki();
+									EquipWeapon(_G.Settings.Main["Selected Weapon"]);
+									v.Humanoid.WalkSpeed = 0;
+									v.HumanoidRootPart.Size = Vector3.new(1, 1, 1);
+									PosMon = v.HumanoidRootPart.CFrame;
+									MonFarm = v.Name;
+									TP("Tween", v.HumanoidRootPart.CFrame * Pos);
+								until not getgenv().StartFarm or ModeFarm == "Farm Katakuri" or World3 or (not v.Parent) or v.Humanoid.Health <= 0 or (game:GetService("Workspace")).Map.CakeLoaf.BigMirror.Other.Transparency == 0 or (game:GetService("ReplicatedStorage")):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or (game:GetService("Workspace")).Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]");
+							end;
+						end;
+					end;
+				else
+					UnEquipWeapon(getgenv().SelectWeapon);
+					TP("Tween", CFrame.new(-2091.911865234375, 70.00884246826172, -12142.8359375));
+				end;
+			end);
+		end;
+	end;
+end);
 local v3 = Tabs.M:AddToggle("v3", {
     Title = "Start Farm",
     Description = "",
