@@ -848,7 +848,7 @@ Tabs.Info:AddButton({
 })
 local v1 = Tabs.M:AddSection("Tab Main")
 local v2 = Tabs.M:AddDropdown("v2", {
-    Title = "Slecect Method Farm"
+    Title = "Slecect Method Farm",
     Values = {"Farm Katakuri", "Level Farm", "Farm Bone", "Farm Tyrant of the Skies"}
 })
 v2:SetValue("Level Farm")
@@ -1098,7 +1098,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                     else
                         TP("Tween", CakePos)
                     end
-                    UnEquipWeapon(_G.Selectweapon)
+                    UnEquipWeapon(_G.SelectWeapon)
                     TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
                 end
             end)
