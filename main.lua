@@ -6,9 +6,9 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(480, 360),
     Acrylic = false,
     Theme = "Darker",
-    MinimizeKey = minimizeUI
+    Enum.KeyCode.LeftControl
 })
-local Tab {
+local Tab =  {
      Info = Window:AddTab({ Title = "Tab Information"}),
      M = Window:AddTab({ Title = "Tab Main"}),
 }
@@ -748,6 +748,15 @@ function EquipWeapon(ToolSe)
             end
         end
     end
+function UnEquipWeapon(Weapon)
+        if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
+            _G.NotAutoEquip = true
+            wait(.5)
+            game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
+            wait(.1)
+            _G.NotAutoEquip = false
+        end
+    end
 function BringMob(huh)
     for i, v in pairs(WS.Enemies:GetChildren()) do
         if v.Name == huh and v.Parent and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 350 then
@@ -889,7 +898,7 @@ spawn(function()
                                                 BringMob = true
                                                 game:GetService'VirtualUser':CaptureController()
                                                 game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-                                            until not getgenv().StartFarm and ModeFarm = "Level Farm" or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+                                            until not getgenv().StartFarm or ModeFarm ~= "Level Farm" or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
                                         else
                                             BringMob = false
                                             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
@@ -922,7 +931,7 @@ spawn(function()
                                                     MonFarm = v.Name          
                                                     game:GetService'VirtualUser':CaptureController()
                                                     game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-                                                until not getgenv().StartFarm and ModeFarm = "Level Farm" or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+                                                until not getgenv().StartFarm or ModeFarm ~= "Level Farm" or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
                                             else
                                                 BringMob = false
                                                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
@@ -980,7 +989,7 @@ spawn(function()
                                         PosMon = v.HumanoidRootPart.CFrame
                                         TP("Tween",  v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                    until not getgenv().StartFarm and ModeFarm = "Farm Bone" and World3 or not v.Parent or v.Humanoid.Health <= 0
+                                    until not getgenv().StartFarm or ModeFarm ~= "Farm Bone" and World3 or not v.Parent or v.Humanoid.Health <= 0
                                 end
                             end
                         end
@@ -1065,7 +1074,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         elseif v.Name == "Head Baker" then
                                             Bring(v.Name, CFrame.new(-2151.37793, 51.0095749, -13033.3975, -0.996587753, 0, 0.0825396702, 0, 1, 0, -0.0825396702, 0, -0.996587753))
                                         end
-                                    until not getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 or not v.Parent or v.Humanoid.Health <= 0 or game:GetService("Workspace").Map.CakeLoaf.BigMirror.Other.Transparency == 0 or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]")
+                                    until not getgenv().StartFarm or ModeFarm == "Farm Katakuri" or World3 or not v.Parent or v.Humanoid.Health <= 0 or game:GetService("Workspace").Map.CakeLoaf.BigMirror.Other.Transparency == 0 or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]")
                                     DamageAura = false
                                 end
                             end
