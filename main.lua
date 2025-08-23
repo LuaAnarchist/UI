@@ -9,7 +9,7 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = minimizeUI
 })
 local Tab {
-     Inf = Window:AddTab({ Title = "Tab Information"}),
+     Info = Window:AddTab({ Title = "Tab Information"}),
      M = Window:AddTab({ Title = "Tab Main"}),
 }
 if game.PlaceId == 2753915549 then
@@ -847,7 +847,7 @@ v2:OnChanged(function(Value)
 end)
 spawn(function()
         while wait() do
-            if getgenv().StartFarm and ModeFarm = "Level Farm" then
+            if getgenv().StartFarm and ModeFarm == "Level Farm" then
                 pcall(function()
                     local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
                     CheckQuest()
@@ -945,7 +945,7 @@ spawn(function()
 spawn(function()
         while wait() do 
             local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-            if getgenv().StartFarm and ModeFarm = "Farm Bone" and World3 then
+            if getgenv().StartFarm and ModeFarm == "Farm Bone" and World3 then
             pcall(function()
                     if BypassTP then
                         if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
@@ -1006,7 +1006,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
     local Plsmon = game:GetService("Workspace").Enemies
      task.spawn(function()
     while task.wait() do
-        if _G.FarmCake then
+        if getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 then
             pcall(function()
                 if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
                     for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
@@ -1025,7 +1025,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
                                     end
                                     NeedAttacking = true
-                                until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
+                                until not getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 or not v.Parent or v.Humanoid.Health <= 0
                                 wait(1)
                             end
                         end
@@ -1064,7 +1064,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         elseif v.Name == "Head Baker" then
                                             Bring(v.Name, CFrame.new(-2151.37793, 51.0095749, -13033.3975, -0.996587753, 0, 0.0825396702, 0, 1, 0, -0.0825396702, 0, -0.996587753))
                                         end
-                                    until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0 or game:GetService("Workspace").Map.CakeLoaf.BigMirror.Other.Transparency == 0 or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]")
+                                    until not getgenv().StartFarm and ModeFarm == "Farm Katakuri" and World3 or not v.Parent or v.Humanoid.Health <= 0 or game:GetService("Workspace").Map.CakeLoaf.BigMirror.Other.Transparency == 0 or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]")
                                     DamageAura = false
                                 end
                             end
